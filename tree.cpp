@@ -7,12 +7,6 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
 	std::vector<int> v{1,2,3,47,5,9,-1};
-	// tree search_tree;
-	// for(int i: v)
-	// {
-	// 	search_tree.insert(i);
-	// }
-	// search_tree.inorder(search_tree.root);
 	rbtree rb;
 
 	for(int i: v)

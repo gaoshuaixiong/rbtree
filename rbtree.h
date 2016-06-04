@@ -111,8 +111,6 @@ void rbtree::rb_delete_fix(node *k)
 
 void rbtree::delete_node(node *k)
 {
-	cout<<"before delete root:"<<root->key<<endl;
-	this->preorder(root);
 	node * x;
 	node *y;
 	rbcolor origin_color;
