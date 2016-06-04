@@ -17,8 +17,13 @@ struct node
 	rbcolor color;
 	node(int a){key =a; this->color = black;};
 	node(int a,node * NIL){key =a; parent = NIL;lchild = NIL;rchild = NIL; this->color = black;};
+	void print_node();
 };
 
+void node::print_node()
+{
+	cout<<"node key: "<<key<<" color:"<<color<<" rchild:"<<rchild->key<<" rchild color:"<<rchild->color<<" lchild:"<<lchild->key<<" lchild color:"<<lchild->color<<endl;
+}
 
 
 class tree
@@ -49,7 +54,7 @@ node* tree::get_uncle(node *k)
 {
 	node *parent = k->parent;
 	node *grand_parent = k->parent->parent;
-	if(parent = grand_parent->lchild)
+	if(parent == grand_parent->lchild)
 	{
 		return grand_parent->rchild;
 	}
@@ -170,7 +175,7 @@ void tree::afterorder(node * r)
 	{
 		afterorder(r->lchild);
 		afterorder(r->rchild);
-		cout<<r->key<<endl;
+		// r->print_node();
 	}
 }
 
@@ -178,7 +183,7 @@ void tree::preorder(node * r)
 {
 	if(r!=NIL)
 	{
-		cout<<r->key<<endl;
+		r->print_node();
 		preorder(r->lchild);
 		preorder(r->rchild);
 	}
@@ -189,7 +194,7 @@ void tree::inorder(node * r)
 	if(r!=NIL)
 	{
 		inorder(r->lchild);
-		cout<<r->key<<endl;
+		r->print_node();
 		inorder(r->rchild);
 	}
 }

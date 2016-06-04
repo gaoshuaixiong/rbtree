@@ -33,8 +33,8 @@ void rbtree::insert_fixup(node  *k)
 			}
 			else if(k== k->parent->lchild)
 			{
-				this->left_rotate(k->parent);
-				k = k->lchild;
+				k = k->parent;
+				this->left_rotate(k);
 			}
 			else
 			{
@@ -100,12 +100,16 @@ void rbtree::insert(int a)
 	z->parent = y;
 	z->color = red;
 	this->insert_fixup(z);
+	cout<<"test root:"<<root->key<<endl;
+	this->preorder(root);
 }
 
 void rbtree::left_rotate(node *x)
 {
+	// cout<<"left_rotate: "<<endl;
+	//  x->print_node();
 	node *y = x->rchild;
-	y->parent = x->parent;
+	node *beta = y->lchild;
 	if(x->parent ==NIL)
 	{
 		root = y;
@@ -118,18 +122,21 @@ void rbtree::left_rotate(node *x)
 	{
 		x->parent->rchild = y;
 	}
+	y->parent = x->parent;
 	x->parent = y;
 	y->lchild = x;
-	x->rchild = y->lchild;
-	if(y->lchild!=NIL)
+	x->rchild = NIL;
+	if(beta!=NIL)
 	{
-		y->lchild->parent = x;
-		x->rchild = y->lchild;
+		beta->parent = x;
+		x->rchild = beta;
 	}
+
 }
 
 void rbtree::right_rotate(node *x)
 {
+	// cout<<"right_rotate: "<<endl;
 	node *y = x->lchild;	
 	node *beta = y->rchild;
 	if(x->parent ==NIL)
@@ -147,6 +154,7 @@ void rbtree::right_rotate(node *x)
 	y->parent = x->parent;
 	y->rchild = x;
 	x->parent = y;
+	x->lchild = NIL;
 	if(beta!=NIL)
 	{
 		beta->parent = x;
