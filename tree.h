@@ -33,7 +33,7 @@ private:
 public:
 	node * NIL;
 	node * root;
-	tree(){NIL = new node(0);root = NIL;root->parent = NIL;};
+	tree(){NIL = new node(0);NIL->rchild = NIL;NIL->lchild = NIL; root = NIL;root->parent = NIL;};
 	~tree(){};
 	void insert(int a);
 	void inorder(node *r);

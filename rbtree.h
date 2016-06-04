@@ -12,10 +12,147 @@ public:
 	void right_rotate(node *x);
 	void insert(int a);
 	void insert_fixup(node *k);
-	void get_brother(node *k);
+	node * get_brother(node *k);
+	void delete_node(node *k);
+	void rb_delete_fix(node *k);
 };
 
+node * rbtree::get_brother(node *k)
+{
+	if(k==k->parent->lchild)
+	{
+		return k->parent->rchild;
+	}
+	else
+	{
+		return k->parent->lchild;
+	}
+}
 
+void rbtree::rb_delete_fix(node *k)
+{
+	node *brother;
+	while((k!= root)&&(k->color== black))
+	{
+		brother =  get_brother(k);
+		if(k == k->parent->lchild)
+		{
+			if(brother->color = red)
+			{
+				brother->color = black;
+				k->parent->color = red;
+				left_rotate(k->parent);
+			}
+			else if((brother->lchild->color ==black)&&(brother->rchild->color ==black))
+			{
+				brother->color = red;
+				k = k->parent;
+			}
+			else if((brother->lchild->color ==red)&&(brother->rchild->color ==black))
+			{
+				brother->color = red;
+				brother->lchild->color = black;
+				right_rotate(brother);
+			}
+			else if((brother->lchild->color ==black)&&(brother->rchild->color ==red))
+			{
+				brother->color = k->parent->color;
+				k->parent->color = black;
+				left_rotate(k->parent);
+				brother->rchild->color =black;
+			}
+			else if((brother->lchild->color ==red)&&(brother->rchild->color ==red))
+			{
+				brother->color = k->parent->color;
+				k->parent->color = black;
+				left_rotate(k->parent);
+				brother->rchild->color =black;
+			}
+			k = root;
+		}
+		if(k == k->parent->rchild)
+		{
+			if(brother->color == red)
+			{
+				brother->color = black;
+				brother->parent->color = red;
+				right_rotate(brother->parent);
+				k = k->parent->parent;
+			}
+			else if((brother->lchild->color == black)&&(brother->rchild->color == black))
+			{
+				brother->color = red;
+				k = k->parent;	
+			}
+			else if((brother->lchild->color == black)&&(brother->rchild->color == red))
+			{
+				brother->rchild->color = black;
+				brother->color = red;
+				left_rotate(brother);
+			}
+			else if((brother->lchild->color == red)&&(brother->rchild->color == black))
+			{
+				brother->color = brother->parent->color;
+				brother->parent->color = black;
+				right_rotate(brother->parent);
+				brother->lchild->color = black;
+			}
+			else if((brother->lchild->color == red)&&(brother->rchild->color == red))
+			{
+				brother->color = brother->parent->color;
+				brother->parent->color = black;
+				right_rotate(brother->parent);
+				brother->lchild->color = black;
+			}
+		}
+	}
+	k->color =black;
+}
+
+void rbtree::delete_node(node *k)
+{
+	cout<<"before delete root:"<<root->key<<endl;
+	this->preorder(root);
+	node * x;
+	node *y;
+	rbcolor origin_color;
+	if(k->lchild == NIL)
+	{
+		x = k->rchild;
+		transplant(k,k->rchild);
+	}
+	else if(k->rchild == NIL)
+	{
+		x =  k->lchild;
+		transplant(k,k->lchild);
+	}
+	else
+	{
+		y = minmun(k->rchild);
+		origin_color  = y->color;
+		x =  y->rchild;
+		if(y->parent == k)
+		{
+			transplant(k,y);
+			y->lchild =  k->lchild;
+			k->lchild->parent = y;
+		}
+		else
+		{
+			transplant(y,x);
+			transplant(k,y);
+			y->lchild = k->lchild;
+			k->lchild->parent = y;
+			y->rchild = k->rchild;
+			k->rchild->parent = y;
+		}
+		y->color = k->color;
+	}
+	if(origin_color == black)
+	{
+		rb_delete_fix(x);
+	}
+}
 
 void rbtree::insert_fixup(node  *k)
 {
@@ -100,8 +237,6 @@ void rbtree::insert(int a)
 	z->parent = y;
 	z->color = red;
 	this->insert_fixup(z);
-	cout<<"test root:"<<root->key<<endl;
-	this->preorder(root);
 }
 
 void rbtree::left_rotate(node *x)

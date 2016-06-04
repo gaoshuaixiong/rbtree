@@ -19,5 +19,13 @@ int main(int argc, char const *argv[])
 	{
 		rb.insert(i);
 	}
+	for(int i:v)
+	{
+		if(rb.root!=rb.NIL)
+		{
+			rb.delete_node(rb.root);
+		}
+		
+	}
 	return 0;
 }
